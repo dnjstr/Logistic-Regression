@@ -32,7 +32,7 @@ class LogisticRegressionScratch:
         y_pred = sigmoid(linear_model)
         return [1 if i >= 0.5 else 0 for i in y_pred]
 
-# Example dataset (Hours studied vs Pass/Fail)
+# Example dataset (Hours studied vs Pass/Fail)/ DUMMY DATASETS
 X = np.array([[1],[2],[3],[4],[5],[6]])
 y = np.array([0,0,0,1,1,1])
 
