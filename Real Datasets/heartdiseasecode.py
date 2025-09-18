@@ -51,12 +51,12 @@ class LogisticRegressionScratch:
         return np.array([1 if p >= threshold else 0 for p in proba])
 
 # Load the dataset
-df = pd.read_csv("Real Datasets/heart_disease.csv")  # adjust if needed
+df = pd.read_csv("Real Datasets/heart_disease.csv")
 
 # Example preprocessing
 df = df.dropna()
 
-# Encode categorical variables if needed
+
 if df['cp'].dtype == object:
     df = pd.get_dummies(df, columns=['cp'], drop_first=True)
 
