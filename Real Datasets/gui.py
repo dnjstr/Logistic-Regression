@@ -3,13 +3,13 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, roc_curve, auc
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 import tkinter as tk
 from tkinter import ttk, messagebox
 import seaborn as sns
 
 # Import our custom logistic regression module
-from logistic_regression import LogisticRegressionScratch, DataProcessor
+from logistic_regression import LogisticRegressionScratch, DataProcessor, sigmoid
 
 plt.style.use('default')
 sns.set_palette("husl")
@@ -177,7 +177,7 @@ class LogisticRegressionGUI:
             
             self.create_training_loss_plot()
             self.create_confusion_matrix_plot()
-            self.create_roc_plot()
+            self.create_sigmoid_plot()  # Changed from ROC to Sigmoid
             self.create_feature_weights_plot()
             
             # To show the update results
@@ -208,24 +208,45 @@ class LogisticRegressionGUI:
         canvas.draw()
         canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
     
-    # for ROC curve (bottom-left)
-    def create_roc_plot(self):
+    # for Sigmoid function (bottom-left)
+    def create_sigmoid_plot(self):
         fig, ax = plt.subplots(figsize=(6, 4))
-        fpr, tpr, _ = roc_curve(self.y_test, self.probas)
-        roc_auc = auc(fpr, tpr)
+    
+    # Generate values for the generic sigmoid function
+        z = np.linspace(-10, 10, 200)
+        s = sigmoid(z)
+        ax.plot(z, s, color='blue', linewidth=2, label="Sigmoid Curve")
+    
+    # Overlay actual model predictions on test set
+        if self.probas is not None:
+        # Use first feature for visualization (project to 1D)
+            X_test_1d = self.X_test_scaled[:, 0]  
+            sort_idx = np.argsort(X_test_1d)
+            ax.scatter(X_test_1d, self.probas, 
+                   c=self.y_test, cmap="bwr", edgecolor="k", alpha=0.7, 
+                   label="Predicted Probabilities")
         
-        ax.plot(fpr, tpr, color='blue', linewidth=2, label=f'AUC = {roc_auc:.3f}')
-        ax.plot([0, 1], [0, 1], color='red', linestyle='--', linewidth=2)
-        ax.set_title('ROC Curve', fontsize=12, fontweight='bold')
-        ax.set_xlabel('False Positive Rate')
-        ax.set_ylabel('True Positive Rate')
-        ax.legend()
+        # Fit a line based on model weights for visualization
+            linear_z = np.linspace(X_test_1d.min(), X_test_1d.max(), 200)
+            linear_probs = sigmoid(linear_z * self.model.weights[0] + self.model.bias)
+            ax.plot(linear_z, linear_probs, color="green", linewidth=2, linestyle="--", label="Model Sigmoid Fit")
+    
+    # Add decision threshold
+        ax.axhline(y=0.5, color='red', linestyle='--', linewidth=1, label="Threshold = 0.5")
+    
+    # Labels & legend
+        ax.set_title('Sigmoid Function & Model Predictions', fontsize=12, fontweight='bold')
+        ax.set_xlabel('Input (z)')
+        ax.set_ylabel('σ(z)')
         ax.grid(True, alpha=0.3)
+        ax.legend(fontsize=8, loc="best")
+    
         plt.tight_layout(pad=2.0)
-        
+    
         canvas = FigureCanvasTkAgg(fig, self.quad3)
         canvas.draw()
         canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
+
     
     # For confusion matrix (top-right)
     def create_confusion_matrix_plot(self):
