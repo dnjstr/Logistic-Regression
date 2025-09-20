@@ -250,7 +250,7 @@ class LogisticRegressionGUI:
     
     # For confusion matrix (top-right)
     def create_confusion_matrix_plot(self):
-        fig, ax = plt.subplots(figsize=(6, 4))
+        fig, ax = plt.subplots(figsize=(5.5, 3.8))  # Match other plots' size
         cm = confusion_matrix(self.y_test, self.y_pred)
         
         disp = ConfusionMatrixDisplay(
@@ -259,17 +259,17 @@ class LogisticRegressionGUI:
         )
         disp.plot(cmap="Blues", ax=ax, colorbar=True, values_format='d')
         
-        ax.set_title('Confusion Matrix - Logistic Regression Scratch', fontsize=11, fontweight='bold', pad=10)
-        ax.set_xlabel('Predicted label', fontsize=10)
-        ax.set_ylabel('True label', fontsize=10)
-        
-        ax.tick_params(axis='both', which='major', labelsize=9)
+        ax.set_title('Confusion Matrix - Logistic Regression Scratch', fontsize=11, fontweight='bold', pad=8)
+        ax.set_xlabel('Predicted label', fontsize=9)
+        ax.set_ylabel('True label', fontsize=9)
+        ax.tick_params(axis='both', which='major', labelsize=8)
         
         for text in ax.texts:
             text.set_fontweight('bold')
             text.set_fontsize(12)
         
-        plt.tight_layout(pad=2.0)
+        plt.subplots_adjust(left=0.25, right=0.95, top=0.30, bottom=0.12)
+        plt.tight_layout(pad=1.5)
         
         canvas = FigureCanvasTkAgg(fig, self.quad2)
         canvas.draw()
@@ -323,7 +323,7 @@ class LogisticRegressionGUI:
                 ax.set_title(f'# {feature}', fontsize=12, fontweight='bold')
         
         plt.tight_layout(pad=2.0)
-        plt.subplots_adjust(top=0.85)
+        plt.subplots_adjust(top=0.85, wspace=0.3)  # <-- Add wspace for more horizontal space
         
         canvas = FigureCanvasTkAgg(fig, self.quad4)
         canvas.draw()
