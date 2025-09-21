@@ -30,13 +30,9 @@ class LogisticRegressionProb:
 
 # Example dataset
 X = np.array([[150],[160],[170],[180],[190],[200]])
-
-# Normalize features (important for stable training)
 X = (X - X.mean()) / X.std()
-
 y = np.array([0,0,0,1,1,1])
 
-# Adjusted learning rate and epochs
 model = LogisticRegressionProb(lr=0.01, epochs=300)
 model.fit(X, y)
 probs = model.predict_proba(X)
