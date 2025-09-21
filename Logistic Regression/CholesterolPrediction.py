@@ -34,7 +34,7 @@ class LogisticRegressionProb:
 X = np.array([[150],[160],[170],[180],[190],[200]])
 y = np.array([0,0,0,1,1,1])
 
-# ONLY CHANGE: Reduce learning rate and epochs to prevent over-convergence
+# Reduce learning rate and epochs to prevent over-convergence
 model = LogisticRegressionProb(lr=0.001, epochs=500)
 model.fit(X, y)
 probs = model.predict_proba(X)
