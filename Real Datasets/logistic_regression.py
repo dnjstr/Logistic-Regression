@@ -22,18 +22,19 @@ class LogisticRegressionScratch:
         self.bias = 0.0
 
         for epoch in range(self.epochs):
+            # forward pass
             linear_model = np.dot(X, self.weights) + self.bias
             y_pred = sigmoid(linear_model)
 
-            # gradients
+            # gradient calculation
             dw = (1 / self.m) * np.dot(X.T, (y_pred - y))
             db = (1 / self.m) * np.sum(y_pred - y)
 
-            # update
+            # parameter updates
             self.weights -= self.lr * dw
             self.bias -= self.lr * db
 
-            # compute and store loss
+            # loss calculation
             loss = - (1/self.m) * np.sum(y*np.log(y_pred + 1e-9) + (1-y)*np.log(1-y_pred + 1e-9))
             self.losses.append(loss)
 
