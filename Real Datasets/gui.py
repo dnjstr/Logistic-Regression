@@ -59,7 +59,7 @@ class LogisticRegressionGUI:
         ttk.Entry(params_frame, textvariable=self.lr_var, width=10).grid(row=0, column=1, padx=(0, 20))
         
         ttk.Label(params_frame, text="Epochs:").grid(row=0, column=2, padx=(0, 5))
-        self.epochs_var = tk.IntVar(value=5000)
+        self.epochs_var = tk.IntVar(value=1000)
         ttk.Entry(params_frame, textvariable=self.epochs_var, width=10).grid(row=0, column=3, padx=(0, 20))
         
         ttk.Label(params_frame, text="Test Size:").grid(row=0, column=4, padx=(0, 5))
